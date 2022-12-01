@@ -5,6 +5,8 @@ using System.Collections;
 public class SwordCutter : MonoBehaviour {
     
 	public Material capMaterial;
+    Rigidbody rb = GetComponent<Rigidbody>();
+    // Vector3 v3Velocity = rb.velocity; 
     AudioSource chopSound;
     void Start()
     {
@@ -12,14 +14,20 @@ public class SwordCutter : MonoBehaviour {
 
     }
 
+    // void Update(){
+    //     if speed>0
+
+    // }
+
     //A function called when an object collides. 
     //TriggerEnter is for physical calculation X 
     //CollisionEnter is suitable for Fruit Ninja.
 
     void OnCollisionEnter(Collision collision)
     {
-
-        GameObject victim = collision.collider.gameObject;
+        Debug.Log(rb.velocity);
+        if (rb.velocity.x>0){
+            GameObject victim = collision.collider.gameObject;
         if (victim.tag == "Fruit")
         {
             GameManager.instance.GetScore();
@@ -40,6 +48,8 @@ public class SwordCutter : MonoBehaviour {
         }
         Destroy(pieces[0], 1);
         Destroy(pieces[1], 1);//Remove the cut pieces (left side & right side)
+        }
+        
     }
     
 
