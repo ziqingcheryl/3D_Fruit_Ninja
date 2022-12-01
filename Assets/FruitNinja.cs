@@ -24,25 +24,24 @@ public class FruitNinja : MonoBehaviour
         while (true)
         {
             start = GameManager.instance.gameStart;
-            //시작 전까지 대기
+            //wait until start
             if (start == true)
              {
-                GameObject go = Instantiate(fruitPrefab[Random.Range(0, fruitPrefab.Length)]);//과일 중에 하나 랜덤으로 선택해서 생성
-                fruitUp.Play();//효과음
+                GameObject go = Instantiate(fruitPrefab[Random.Range(0, fruitPrefab.Length)],new Vector3(0, 0, -1f));//Randomly select one of the fruits
+                fruitUp.Play();//sound effect
                 fruitNum++;
-                Rigidbody temp = go.GetComponent<Rigidbody>();//선택된 과일 정보 가져옴
+                Rigidbody temp = go.GetComponent<Rigidbody>();//Get selected fruit information
 
-                temp.velocity = new Vector3(0f, Random.Range(4f, 6f), -0.5f);//속도 설정
-                temp.angularVelocity = new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f));//각속도 설정 (물체 회전)
-                temp.useGravity = true;//중력 설정
+                temp.velocity = new Vector3(0f, Random.Range(4f, 6f), -0.5f);//speed setting
+                temp.angularVelocity = new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f));//Angular velocity setting (object rotation)
+                temp.useGravity = true;//gravity settings
 
                 Vector3 pos = transform.position;
-                pos.x += Random.Range(-0.7f, 0.7f);//x축 위치 랜덤으로 설정
-                go.transform.position = pos;//위치 지정
+                pos.x += Random.Range(-1f, 1f);//Set axis x  position randomly
+                go.transform.position = pos;//positioning
 
 
-                yield return new WaitForSeconds(1.2f);//몇 초 대기
-
+                yield return new WaitForSeconds(1.2f);//wait a few seconds
             }
             yield return new WaitForSeconds(0.1f);
         }

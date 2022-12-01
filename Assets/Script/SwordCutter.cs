@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof(Rigidbody))]//Rigid body 설정을 자동으로 해줌
+[RequireComponent (typeof(Rigidbody))]//Rigid body set up automatically
 public class SwordCutter : MonoBehaviour {
     
 	public Material capMaterial;
@@ -12,7 +12,9 @@ public class SwordCutter : MonoBehaviour {
 
     }
 
-    //물체가 충돌했을 때 호출되는 함수. TriggerEnter는 물리적 계산 X CollisionEnter가 후르츠 닌자에는 적합.
+    //A function called when an object collides. 
+    //TriggerEnter is for physical calculation X 
+    //CollisionEnter is suitable for Fruit Ninja.
 
     void OnCollisionEnter(Collision collision)
     {
@@ -37,7 +39,7 @@ public class SwordCutter : MonoBehaviour {
 
         }
         Destroy(pieces[0], 1);
-        Destroy(pieces[1], 1);//잘려진 조각 없앰(left side & right side)
+        Destroy(pieces[1], 1);//Remove the cut pieces (left side & right side)
     }
     
 

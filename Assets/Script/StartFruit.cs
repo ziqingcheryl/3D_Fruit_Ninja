@@ -22,7 +22,7 @@ public class StartFruit : MonoBehaviour
     }
     void Update()
     {
-        //과일 회전
+        //fruit rotation
         float frequency = -60 * Time.deltaTime;
         transform.Rotate(0, frequency, 0);
     }
@@ -39,7 +39,7 @@ public class StartFruit : MonoBehaviour
 
     IEnumerator GameStart()
     {
-        //시작, 기록 과일 떨어지게
+        //start, record fruit fall
         GetComponent<Rigidbody>().useGravity = true;
         quitFruit.GetComponent<Rigidbody>().useGravity = true;
 
@@ -67,14 +67,14 @@ public class StartFruit : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         yield return new WaitForSeconds(0.5f);
-        readyText.GetComponent<TextMesh>().text = "40초";
+        readyText.GetComponent<TextMesh>().text = "40 seconds";
         yield return new WaitForSeconds(2f);
         clickSound.Play();
         readyText.GetComponent<TextMesh>().text = "Round 1";
         yield return new WaitForSeconds(1f);
         readyText.GetComponent<TextMesh>().text = "";
-        //게임 시작
-        //board.SetActive(true);
+        //starting Game
+        board.SetActive(true);
         GameManager.instance.gameStart = true;
     }
 

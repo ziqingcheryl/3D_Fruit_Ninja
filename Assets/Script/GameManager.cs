@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour {
     private float time;
     private int fruitNum;
     private float scorePercent;
-    private string url = "http://15.164.220.109/Api/MediBoard/TrainingChart";
     private string[] arguments;
     private int round;
     private float gameTime;
@@ -55,25 +54,21 @@ public class GameManager : MonoBehaviour {
 
     AudioSource timeupSound;
 
-    //초기 실행 함수
+    //initial run function
     void Awake () {
         instance = this;
         arguments = Environment.GetCommandLineArgs ();
-        //토큰 받아오기
+        //Get Token
 
         token = arguments[1].ToString();
-        //token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZGM0MmFlNWM5ZTc3YzAwMDFkYzYwMTYiLCJyb2xlcyI6IlJPTEVfUGF0aWVudCIsImlhdCI6MTU3MzE0Mjc2MSwiZXhwIjoxNTczMTQ2MzYxfQ.YaFk2JuUvdmVNrUKMg5EWDk8mTcQmR1Ja2HWdzjMiUA";
         gameTime = 60.0f;
-
-        //게임 시작 전 처방 데이터 받아오기
-        StartCoroutine ("GetData");
 
     }
 
     void Start () {
 
         gameStart = false;
-        round = 1; //라운드 1
+        round = 1; //round 1
         score = 0;
         time = gameTime;
         timeupSound = GetComponent<AudioSource> ();
@@ -84,34 +79,29 @@ public class GameManager : MonoBehaviour {
         if (gameStart == true && round == 1) {
             scoreText.GetComponent<TextMesh> ().text = score.ToString ();
             bestScoreText.GetComponent<TextMesh> ().text = "BEST: " + GetBestScore ();
-            timeText.GetComponent<TextMesh> ().text = time.ToString ("F1") + "초";
+            timeText.GetComponent<TextMesh> ().text = time.ToString ("F1") + "seconds";
             time -= Time.deltaTime;
 
-            //1 round 끝
+            //End of 1st round
 
             if (time < 0 && round == 1) {
                 round = 2;
                 gameStart = false;
                 time = 0;
                 fruitNum = spawner.GetComponent<FruitNinja> ().fruitNum;
-                //1 round 끝나고, 집중도 데이터 보내기
-               // GameObject.Find ("EyeFocusCheck").GetComponent<ViveSR.anipal.Eye.EyeFocusCheck> ().PostData (preData.blurMin, preData.horizontalMin, preData.verticalMin);
                 StartCoroutine ("Round2");
             }
         } else if (gameStart == true && round == 2) {
             scoreText.GetComponent<TextMesh> ().text = score.ToString ();
             bestScoreText.GetComponent<TextMesh> ().text = "BEST: " + GetBestScore ();
-            timeText.GetComponent<TextMesh> ().text = time.ToString ("F1") + "초";
+            timeText.GetComponent<TextMesh> ().text = time.ToString ("F1") + "seconds";
             time -= Time.deltaTime;
 
-            //2 round 끝
+            //End of 2nd round
             if (time < 0 && round == 2) {
                 gameStart = false;
                 time = 0;
                 fruitNum = spawner.GetComponent<FruitNinja> ().fruitNum;
-                //게임 끝나고, 집중도 데이터 보내기
-               // GameObject.Find ("EyeFocusCheck").GetComponent<ViveSR.anipal.Eye.EyeFocusCheck> ().PostData (preData.blurMax, preData.horizontalMax, preData.verticalMax);
-                StartCoroutine ("Finish");
             }
 
         }
@@ -136,30 +126,7 @@ public class GameManager : MonoBehaviour {
         score++;
 
     }
-//프리즘과 블러 세팅
-    public void SetPrismBlur () {
-        float horiMin = (float) (preData.horizontalMin * 0.57);
-        float vertiMin = (float) (preData.verticalMin * 0.57);
-        Debug.Log ("prism min" + horiMin + "," + vertiMin);
-        Debug.Log (preData.blurMax);
-
-        if (preData.mainEye == "rightEye") //오른쪽이 주시안일 경우
-        {
-            //약시안인 왼쪽 각도 변경
-            GameObject.Find ("CameraLeft").GetComponent<Transform> ().rotation = Quaternion.Euler (vertiMin, horiMin, 0);
-            blurPanel.transform.parent = GameObject.FindWithTag ("rightEye").transform;
-            blurPanel.GetComponent<Renderer> ().material.SetFloat ("_Radius", preData.blurMax);
-        } 
-        else //왼쪽이 주시안일 경우
-        {
-            //약시안인 오른쪽 각도 변경
-            GameObject.Find ("CameraRight").GetComponent<Transform> ().rotation = Quaternion.Euler (vertiMin, horiMin, 0);
-            blurPanel.GetComponent<Renderer> ().material.SetFloat ("_Radius", preData.blurMax);
-            blurPanel.transform.parent = GameObject.FindWithTag ("leftEye").transform;
-        }
-
-    }
-
+    
     IEnumerator Round2 () {
 
         board.SetActive (false);
@@ -170,7 +137,7 @@ public class GameManager : MonoBehaviour {
 
         yield return new WaitForSeconds (2f);
 
-        finishText.GetComponent<TextMesh> ().text = "잠시 휴식 후 2라운드 시작됩니다.";
+        finishText.GetComponent<TextMesh> ().text = "After a short break, round 2 begins.";
 
         yield return new WaitForSeconds (2f);
 
@@ -184,7 +151,7 @@ public class GameManager : MonoBehaviour {
         startColorLeft.a = 1.0f;
         fadeImageLeft.color = startColorRight;
 
-        yield return new WaitForSeconds (5f); //5초 휴식
+        yield return new WaitForSeconds (5f); //5 second break
 
         //fade in
         startColorRight.a = 0;
@@ -193,7 +160,7 @@ public class GameManager : MonoBehaviour {
         fadeImageLeft.color = startColorRight;
 
         yield return new WaitForSeconds (1f);
-        finishText.GetComponent<TextMesh> ().text = "40초";
+        finishText.GetComponent<TextMesh> ().text = "40 seconds";
         yield return new WaitForSeconds (2f);
         timeupSound.Play ();
 
@@ -201,24 +168,7 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds (1f);
         finishText.GetComponent<TextMesh> ().text = "";
 
-//프리즘과 블러 세팅
-        float horiMax = (float) (preData.horizontalMax * 0.57);
-        float vertiMax = (float) (preData.verticalMax * 0.57);
-        if (preData.mainEye == "leftEye") //왼쪽이 주시안일 경우
-        {
-            //블러 최대값 적용
-            blurPanel.GetComponent<Image>().material.SetFloat("_Radius", preData.blurMax);
-            //약시안인 오른쪽 각도 변경
-            GameObject.Find ("CameraRight").GetComponent<Transform> ().rotation = Quaternion.Euler (vertiMax, horiMax, 0);
-        } else //오른쪽이 주시안일 경우
-        {
-            //블러 최대값 적용
-            blurPanel.GetComponent<Image>().material.SetFloat("_Radius", preData.blurMax);
-            //약시안인 왼쪽 각도 변경
-            GameObject.Find ("CameraLeft").GetComponent<Transform> ().rotation = Quaternion.Euler (vertiMax, horiMax, 0);
-        }
-
-        //게임 시작
+        //starting Game
 
         board.SetActive (true);
         round = 2;
@@ -238,31 +188,14 @@ public class GameManager : MonoBehaviour {
 
         yield return new WaitForSeconds (2f);
 
-        finishText.GetComponent<TextMesh> ().text = (((float) score / fruitNum) * 100).ToString ("F1") + "% 달성하셨습니다!";
+        finishText.GetComponent<TextMesh> ().text = (((float) score / fruitNum) * 100).ToString ("F1") + "% You have achieved!";
 
         yield return new WaitForSeconds (4f);
 
         UpdateBestScore ();
 
-        SceneManager.LoadScene (0); //게임 재시작
+        SceneManager.LoadScene (0); //game restart
 
     }
 
-    IEnumerator GetData () {
-        var uwr = new UnityWebRequest (url, "GET");
-        uwr.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer ();
-        uwr.SetRequestHeader ("accept", "application/json;charset=UTF-8");
-        uwr.SetRequestHeader ("X-AUTH-TOKEN", token);
-
-        yield return uwr.SendWebRequest ();
-
-        if (uwr.isNetworkError || uwr.isHttpError) {
-            Debug.Log (uwr.error);
-        } else {
-            // Show results as text
-            preData = JsonUtility.FromJson<prescriptionData> (uwr.downloadHandler.text);
-            Debug.Log (preData.mainEye);
-            SetPrismBlur ();
-        }
-    }
 }
