@@ -27,7 +27,7 @@ public class FruitNinja : MonoBehaviour
             //wait until start
             if (start == true)
              {
-                GameObject go = Instantiate(fruitPrefab[Random.Range(0, fruitPrefab.Length)],new Vector3(0, 0, -1f));//Randomly select one of the fruits
+                GameObject go = Instantiate(fruitPrefab[Random.Range(0, fruitPrefab.Length)]);//Randomly select one of the fruits
                 fruitUp.Play();//sound effect
                 fruitNum++;
                 Rigidbody temp = go.GetComponent<Rigidbody>();//Get selected fruit information
@@ -38,6 +38,9 @@ public class FruitNinja : MonoBehaviour
 
                 Vector3 pos = transform.position;
                 pos.x += Random.Range(-1f, 1f);//Set axis x  position randomly
+                pos.z += Random.Range(-1.5f, 1f); //Set axis z sometimes farther and sometimes nearer to make the user exercise
+                pos.y=444l; // Height of the fruit
+
                 go.transform.position = pos;//positioning
 
 
