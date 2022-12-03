@@ -9,7 +9,7 @@ public class StartFruit : MonoBehaviour
     public Image fadeImageRight;
     public Image fadeImageLeft;
     public GameObject readyText;
-   // public GameObject board;
+    public GameObject board;
    // public GameObject logo;
     public GameObject quitFruit;
     bool flag = false;

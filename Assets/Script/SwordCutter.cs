@@ -5,12 +5,13 @@ using System.Collections;
 public class SwordCutter : MonoBehaviour {
     
 	public Material capMaterial;
-    Rigidbody rb = GetComponent<Rigidbody>();
+    public Rigidbody rb;
     // Vector3 v3Velocity = rb.velocity; 
     AudioSource chopSound;
     void Start()
     {
         chopSound = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody>();
 
     }
 
